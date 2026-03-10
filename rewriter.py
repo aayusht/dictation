@@ -1,6 +1,7 @@
 import atexit
 import json
 import subprocess
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -28,11 +29,10 @@ class Rewriter:
             "--host", config.LLAMA_SERVER_HOST,
             "--port", str(config.LLAMA_SERVER_PORT),
         ]
-        self._process = subprocess.Popen(
-            cmd,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
+        kwargs = dict(stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if sys.platform == "win32":
+            kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+        self._process = subprocess.Popen(cmd, **kwargs)
         try:
             self._wait_for_ready()
         except Exception:

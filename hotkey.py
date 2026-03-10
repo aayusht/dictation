@@ -15,11 +15,13 @@ class HotkeyListener:
 
     def _handle_press(self, key: Key) -> None:
         if key == self._hotkey and not self._held:
+            print(key, self._held, self._hotkey)
             self._held = True
             self._on_press()
 
     def _handle_release(self, key: Key) -> None:
         if key == self._hotkey and self._held:
+            print(key, self._held, self._hotkey)
             self._held = False
             self._on_release()
 

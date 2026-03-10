@@ -1,4 +1,6 @@
+import sys
 import threading
+import time
 
 import numpy as np
 import sounddevice as sd
@@ -26,7 +28,7 @@ def main():
     transcriber = Transcriber()
     print("Loading rewriter…")
     rewriter = Rewriter()
-    print("Models loaded. Press F9 to dictate.")
+    print("Models loaded. Press F9 to dictate. Press q in this terminal to quit.")
 
     recorder = Recorder()
 
@@ -42,20 +44,45 @@ def main():
         threading.Thread(target=pipeline, args=(audio,), daemon=True).start()
 
     def pipeline(audio: np.ndarray):
+        print("Transcribing…")
         raw = transcriber.transcribe(audio)
+        print(f"Raw: {raw}")
         if not raw.strip():
             raise RuntimeError("No audio data received")
-        print(f"Raw: {raw}")
         cleaned = rewriter.rewrite(raw)
         print(f"Cleaned: {cleaned}")
         processed = post_process(cleaned)
         print(f"Processed: {processed}")
         injector.paste(processed)
-        _beep(config.BEEP_FREQ_DONE)
+        # _beep(config.BEEP_FREQ_DONE)
+
+    def wait_for_terminal_quit() -> None:
+        if sys.platform == "win32":
+            import msvcrt
+
+            while True:
+                if msvcrt.kbhit():
+                    key = msvcrt.getwch()
+                    if key in ("\x00", "\xe0"):
+                        msvcrt.getwch()
+                        continue
+                    if key.lower() == "q":
+                        return
+                time.sleep(0.05)
+
+        while True:
+            if input().strip().lower() == "q":
+                return
 
     listener = HotkeyListener(on_press, on_release)
     listener.start()
-    listener.join()
+    try:
+        wait_for_terminal_quit()
+    except KeyboardInterrupt:
+        print("\nStopping…")
+    finally:
+        listener.stop()
+        listener.join()
 
 
 if __name__ == "__main__":
