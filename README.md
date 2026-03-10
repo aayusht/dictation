@@ -43,7 +43,7 @@ A hands-free dictation system that transcribes your speech, optionally rewrites 
   ```
 3. **Download LLM Model**:
   - Create a `models/` directory.
-  - Download a Qwen 3.5 model (e.g. [the 2B quantized model here](https://huggingface.co/unsloth/Qwen3.5-2B-GGUF/blob/main/Qwen3.5-2B-Q4_K_M.gguf) and place it into the newly created `models/` directory
+  - Download a Qwen 3.5 model (e.g. [the 2B quantized model here](https://huggingface.co/unsloth/Qwen3.5-2B-GGUF/blob/main/Qwen3.5-2B-Q4_K_M.gguf)) and place it into the newly created `models/` directory
   - Update `config.py`'s MODEL_NAME if the filename differs from the default.
 
 ## Configuration
