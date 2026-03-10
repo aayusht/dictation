@@ -5,7 +5,7 @@ Rules:
 - Replace spoken punctuation with actual punctuation
 - Fix repeated speech and remove incompleted or corrected phrases
 - Fix typos and soundalikes, e.g. "Get commit dash em." is probably git commit -m
-- Adjust sentence breaks/commas as necessary to join/separate clauses as needed
+- Join sentences with a comma when it makes sense
 - Do NOT change anything else
 - Do NOT remove e.g. and i.e. clauses
 - Do NOT change the meaning or add information
